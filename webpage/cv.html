@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Successful</title>
+    <link rel="stylesheet" href="style.css">
+
+  </head>
+  <body onload="getAll()">
+    <div class="cv_page">
+      <div class="button"></div>
+      <h1 class="title">My CV</h1>
+    </div>
+    <div id="signupResult"></div>
+    <div>
+      <ul></ul>
+    </div>
+    <script>
+      if(localStorage.token != undefined){
+        const logout = `<button type="button" onclick="logout()">Logout</button>`
+        document.querySelector('div.button').insertAdjacentHTML("beforeend",logout)
+      }else{
+        const login = `<button type="button" onclick="login()">Login</button>`
+        document.querySelector('div.button').insertAdjacentHTML("beforeend",login)
+      }
+      const logout = () => {
+        localStorage.clear()
+        window.location='login.html'
+      }
+      const login = () => {
+        window.location='login.html'
+      }
+
+      const url = 'http://localhost:3000/api/cv/getAll'
+
+      const getAll = () => {
+      fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(user => {
+            const cv =`<div class="cvinfo"><h3><b>Nome:</b> ${user.nome}</h3>` + `<h3><b>Idade:</b> ${user.idade}</h3>` +
+            `<h3><b>Escolaridade:</b> ${user.escolaridade}</h3>` + `<h3><b>Experiencia:</b> ${user.experiencia}</h3>` + `<h3><b>Curso:</b> ${user.curso}</h3></div>`
+            document.querySelector('ul').insertAdjacentHTML("beforeend",cv)
+        });
+      })
+      }
+      
+    </script>
+  </body>
+</html>

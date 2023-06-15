@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Login Form</h2>
+      <div id="loginResult"></div>
+      <div id="loginForm">
+        <div class="form">
+          <label for="username">Username:</label>
+          <input
+            type="username"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+          />
+        </div>
+        <div class="form">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <div class="form">
+          <button type="button" onclick="login()">Login to edit CV</button>
+          <button type="button" onclick="window.location='cv.html'">View CV</button>
+          <button type="button" onclick="signup()">Signup</button>
+
+        </div>
+        <!--window.location='cv.html'-->
+        
+        <script>
+          
+        function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Replace with your login endpoint URL
+        const url = 'http://localhost:3000/api/user/login';
+
+        const requestBody = { username, password };
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem('token', data.token);
+            console.log(localStorage.token)
+            if (data.token !== undefined){
+              window.location='ul_cv.html'
+            }
+
+            // Handle login response
+            document.getElementById('loginResult').innerHTML =
+              JSON.stringify(data);
+            
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
+
+      function signup() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Replace with your signup endpoint URL
+        const url = 'http://localhost:3000/api/user/register';
+
+        const requestBody = { username, password };
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // Handle signup response
+            document.getElementById('signupResult').innerHTML =
+              JSON.stringify(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+        }
+        </script>
+  </body>
+</html>
